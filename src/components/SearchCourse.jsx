@@ -11,10 +11,14 @@ const SearchCourse = () => {
 
     const [result,setResult]=useState([])
 
+// input value fetching
 
     const inputHandler=(event)=>{
         setData({...data,[event.target.name]:event.target.value})
     }
+
+// Search button event
+
     const readValue=(event)=>{
         console.log(data)
         axios.post("http://localhost:8085/search",data).then(
@@ -27,6 +31,25 @@ const SearchCourse = () => {
             }
         )
     }
+
+// delete event handling
+
+const deleteCourse = (id)=>{
+  let input={"_id":id}
+
+axios.post("http://localhost:8085/delete",input).then(
+    (response)=>{
+        console.log(response.data)
+        if (response.data.status=="success") {
+            alert("succesfully deleted")
+        } else {
+            alert("something went wrong")
+        }
+    }
+)
+}
+
+
   return (
     <div>
         <Navbar/>
@@ -71,6 +94,7 @@ const SearchCourse = () => {
         <td>{value.duration}</td>
         <td>{value.venue}</td>
         <td>{value.trainername}</td>
+        <td><button className="btn btn-danger" onClick={()=>{deleteCourse(value._id)}}>DELETE</button></td>
       </tr>
     }
    )}
